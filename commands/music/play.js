@@ -1,6 +1,14 @@
 const ytdl = require('ytdl-core');
-const { joinVoiceChannel } = require('@discordjs/voice');
-const { getVoiceConnection } = require('@discordjs/voice');
+const {
+	AudioPlayerStatus,
+	StreamType,
+	createAudioPlayer,
+	createAudioResource,
+	joinVoiceChannel,
+} = require('@discordjs/voice');
+
+const playSong = require("./playSong.js");
+
 module.exports = async function (msg, tokens, serverQueue, queue) {
   
     const voiceChannel = msg.member.voice.channel;
@@ -24,8 +32,9 @@ module.exports = async function (msg, tokens, serverQueue, queue) {
           textChannel: msg.channel,
           voiceChannel: voiceChannel,
           connection: null,
+          audioPlayer: null,
           songs: [],
-          volume: 5,
+          volume: 0.5,
           playing: true
         };
     
@@ -40,7 +49,7 @@ module.exports = async function (msg, tokens, serverQueue, queue) {
 						adapterCreator: voiceChannel.guild.voiceAdapterCreator,
 					});
           queueContruct.connection = connection;
-          play(msg.guild, queueContruct.songs[0],queue);
+          playSong(msg, queueContruct.songs[0], queue);
         }
         catch (err) {
           console.log(err);
@@ -54,21 +63,3 @@ module.exports = async function (msg, tokens, serverQueue, queue) {
       }
 }
 
-function play(guild, song, queue) {
-    const serverQueue = queue.get(guild.id);
-    if (!song) {
-      serverQueue.voiceChannel.leave();
-      queue.delete(guild.id);
-      return;
-    }
-    const connection = getVoiceConnection(guild.id);
-    console.log(connection);
-    const dispatcher = connection.subscribe(ytdl(song.url))
-      .on("finish", () => {
-        serverQueue.songs.shift();
-        play(guild, serverQueue.songs[0], queue);
-      })
-      .on("error", error => console.error(error));
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    serverQueue.textChannel.send(`Start playing: **${song.title}**`);
-  }
