@@ -18,22 +18,25 @@ const axios = require('axios');
 const cherrio = require('cheerio');
 
 
-
-
 module.exports = async function (msg){
     if(msg.channel.id == process.env.CHANNEL){
         let tokens = msg.content.split(" ");
         let command = tokens.shift();
+
+        // gif command prefix !
         if(command.charAt(0) == '!'){
             command = command.substring(1);
             commands[command](msg, tokens);
             
         }
+        // music command prefix $
         else if(command.charAt(0) == '$'){
             command = command.substring(1);
             music(msg, command, tokens);
 
-        } else if(command.charAt(0) == '%'){
+        }
+        // music player testing command prefix %
+        else if(command.charAt(0) == '%'){
             
             voiceChannel = msg.member.voice.channel;
             guild = msg.member.guild;
@@ -52,12 +55,15 @@ module.exports = async function (msg){
             
             console.log(player);
             player.on(AudioPlayerStatus.Idle, () => connection.destroy());
-        } else if (command.charAt(0) == '*'){
-            const page_url = 'https://gamepress.gg/arknights/operator/skadi-corrupting-heart';
+        }
+        // arknights command prefix *
+        // webscraper that pulls up image of character searched (need to figure out how to use url search index)
+        else if (command.charAt(0) == '*'){
+            /* const page_url = 'https://gamepress.gg/arknights/operator/skadi-corrupting-heart';
             const {data} = await axios.get(page_url);
             const $ = cherrio.load(data);
             const image = $('.operator-image.current-tab').find('a').attr('href');
-            msg.channel.send(image);
+            msg.channel.send(image); */
         }
     }
 }

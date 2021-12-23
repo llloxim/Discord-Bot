@@ -1,9 +1,10 @@
 const play = require("./play.js");
 const skip = require("./skip.js");
 const stop = require("./stop.js");
+const search = require("./search.js");
 
 
-const muse = {play, skip, stop};
+const muse = {play, skip, stop, search};
 const queue = new Map();
 
 module.exports = function (msg, command, tokens){
@@ -11,7 +12,12 @@ module.exports = function (msg, command, tokens){
 
     if(command == "play")
     {
-        play(msg, tokens, serverQueue, queue);
+        if(tokens[0].includes("https://")){
+            play(msg, tokens[0], serverQueue, queue);
+        }
+        else{
+            search(msg, tokens, serverQueue, queue);
+        }
     }
     else if(command == "skip")
     {

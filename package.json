@@ -17,7 +17,10 @@
     "dotenv": "^10.0.0",
     "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^4.4.0",
+    "google-auth-library": "^7.11.0",
+    "googleapis": "^92.0.0",
     "libsodium-wrappers": "^0.7.9",
-    "ytdl-core": "^4.9.1"
+    "youtube-api": "^3.0.1",
+    "ytdl-core": "^4.9.2"
   }
 }

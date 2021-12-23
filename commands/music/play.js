@@ -9,7 +9,7 @@ const {
 
 const playSong = require("./playSong.js");
 
-module.exports = async function (msg, tokens, serverQueue, queue) {
+module.exports = async function (msg, url, serverQueue, queue) {
   
     const voiceChannel = msg.member.voice.channel;
     if (!voiceChannel)
@@ -22,7 +22,7 @@ module.exports = async function (msg, tokens, serverQueue, queue) {
         "I need the permissions to join and speak in your voice channel!"
       );
     }
-    const songInfo = await ytdl.getInfo(tokens[0]);
+    const songInfo = await ytdl.getInfo(url);
     const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
