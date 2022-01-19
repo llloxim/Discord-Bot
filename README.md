@@ -1,5 +1,7 @@
 # bot
 this be a discord bot for functions that we have seen in bots that we use personally and wanted to try implementing ourselves
+Uses Axios to perform http requests.
+Uses YoutubeData API to search videos and Discord API to connect to voice channel
 
 ## [command prefix]
 
