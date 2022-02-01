@@ -11,8 +11,13 @@ module.exports = function (msg, command, tokens){
     const serverQueue = queue.get(msg.guild.id);
 
     if(command == "play")
-    {
-        if(tokens[0].includes("https://")){
+    {   
+        if(tokens[0] == null){
+            return msg.channel.send(
+                "Please add a link or use a keyword to search for a video!"
+            );
+        }
+        else if(tokens[0].includes("https://")){
             play(msg, tokens[0], serverQueue, queue);
         }
         else{

@@ -16,17 +16,28 @@ module.exports = async function playSong(msg, song, queue) {
       queue.delete(guild.id);
       return;
     }
-    const stream = ytdl(song.url, { filter: 'audioonly' });
-    const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary, inlineVolume: true });
-    resource.volume.setVolume(serverQueue.volume);
-    const player = createAudioPlayer();
-    serverQueue.connection.subscribe(player);
-    serverQueue.audioPlayer = player;
+    try {
+      const stream = ytdl(song.url, { filter: 'audioonly' });
+      const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary, inlineVolume: true });
+      resource.volume.setVolume(serverQueue.volume);
+      const player = createAudioPlayer();
+      serverQueue.connection.subscribe(player);
+      serverQueue.audioPlayer = player;
+    
 
-    player.play(resource);
-    player.on(AudioPlayerStatus.Idle, () => {
-      serverQueue.songs.shift();
+      player.play(resource);
+      msg.channel.send(
+        `playing ${serverQueue.songs[0].title}`
+      );
+      player.on(AudioPlayerStatus.Idle, () => {
+        serverQueue.songs.shift();
       playSong(msg, serverQueue.songs[0], queue);
-    });
+      });
+      } 
+      catch (err){
+        console.log(err);
+        queue.delete(msg.guild.id);
+        return msg.channel.send(err);
+      }
     
   }

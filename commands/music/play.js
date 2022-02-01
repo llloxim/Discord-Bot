@@ -12,6 +12,11 @@ const playSong = require("./playSong.js");
 module.exports = async function (msg, url, serverQueue, queue) {
   
     const voiceChannel = msg.member.voice.channel;
+    if (!url){
+      return msg.channel.send(
+        "please add a link or use a keyword to search for a video!"
+      );
+    }
     if (!voiceChannel)
       return msg.channel.send(
         "You need to be in a voice channel to play music!"
@@ -32,7 +37,6 @@ module.exports = async function (msg, url, serverQueue, queue) {
           textChannel: msg.channel,
           voiceChannel: voiceChannel,
           connection: null,
-          audioPlayer: null,
           songs: [],
           volume: 0.5,
           playing: true

@@ -7,4 +7,5 @@ module.exports = async function (msg, serverQueue) {
     }
     serverQueue.songs = [];
     serverQueue.audioPlayer.stop();
+    serverQueue.playing = false
 }
